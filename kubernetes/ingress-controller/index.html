@@ -1202,8 +1202,19 @@ and <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups
 the HTTP routing capabilities are very limited. Skipper&rsquo;s main advantage
 compared to other HTTP routers is matching and changing HTTP. Another advantage
 for us and for skipper users in general is that defaults with
-<a href="https://github.com/zalando-incubator/kube-ingress-aws-controller">kube-ingress-aws-controller</a>,
-just work as you would expect.</p>
+<a href="https://github.com/zalando-incubator/kube-ingress-aws-controller">kube-ingress-aws-controller</a>
+just work as you would expect.
+For lower latency, safety, and cost reasons you can also use Network
+Load Balancer (NLB) instead of Application Load Balancer (ALB).
+We tested two cases (Skipper backends were pre-scaled and not changed):</p>
+<ol>
+<li>A hard switch to a cold NLB with 1 million requests per second
+(RPS). A similar test with 100k RPS with ALB results in client visible
+error rates and high latency percentiles.</li>
+<li>A 6h test with 2k RPS showed regular spikes in p999 latency to more
+than 100ms in for ALB. NLB showed a flat p999 latency of 25-35ms for
+the same workload.</li>
+</ol>
 <p>There are a number of other ingress controllers including
 <a href="https://traefik.io/">traefik</a>,
 <a href="https://kubernetes.github.io/ingress-nginx/">nginx</a>,
@@ -1880,8 +1891,9 @@ Check the repository if you need more configuration possibilities.</p>
 <h2 id="run-as-api-gateway-with-east-west-setup">Run as API Gateway with East-West setup<a class="headerlink" href="#run-as-api-gateway-with-east-west-setup" title="Permanent link">&para;</a></h2>
 <p>East-West means cluster internal service-to-service communication.
 For this you need to resolve DNS to skipper for one or more additional
-domains of your choice. When Ingress or RouteGroup objects specify such
-domains Skipper will add the configured predicates.</p>
+domains of your choice. When Ingress or
+<a href="../routegroups/">RouteGroup</a> objects specify such domains Skipper
+will add the configured predicates.</p>
 <h3 id="skipper">Skipper<a class="headerlink" href="#skipper" title="Permanent link">&para;</a></h3>
 <p>To enable the East-West in skipper, you need to run skipper with
 <code>-kubernetes-east-west-range-domains</code> and
@@ -1980,7 +1992,7 @@ before running it in production.</p>
 <span class="nt">metadata</span><span class="p">:</span>
   <span class="nt">labels</span><span class="p">:</span>
     <span class="nt">application</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">skipper-redis</span>
-    <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v4.0.9</span>
+    <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v6.2.4</span>
   <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">skipper-redis</span>
   <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kube-system</span>
 <span class="nt">spec</span><span class="p">:</span>
@@ -1993,10 +2005,10 @@ before running it in production.</p>
     <span class="nt">metadata</span><span class="p">:</span>
       <span class="nt">labels</span><span class="p">:</span>
         <span class="nt">application</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">skipper-redis</span>
-        <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v4.0.9</span>
+        <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v6.2.4</span>
     <span class="nt">spec</span><span class="p">:</span>
       <span class="nt">containers</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">registry.opensource.zalan.do/zmon/redis:4.0.9-master-6</span>
+      <span class="p p-Indicator">-</span> <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">registry.opensource.zalan.do/library/redis-6-alpine:6-alpine-20210712</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">skipper-redis</span>
         <span class="nt">ports</span><span class="p">:</span>
         <span class="p p-Indicator">-</span> <span class="nt">containerPort</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">6379</span>
