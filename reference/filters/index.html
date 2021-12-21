@@ -3234,8 +3234,12 @@ authorization endpoint as a filter.</p>
 is being done to the webhook endpoint. It is possible to copy headers
 from the webhook response into the continuing request by specifying the
 headers to copy as an optional second argument to the filter.</p>
-<p>Responses from the webhook with status code less than 300 will be
-authorized, the rest will be unauthorized.</p>
+<p>Responses from the webhook will be treated as follows:</p>
+<ul>
+<li>Authorized if the status code is less than 300</li>
+<li>Forbidden if the status code is 403</li>
+<li>Unauthorized for remaining status codes</li>
+</ul>
 <p>Examples:</p>
 <div class="highlight"><pre><span></span><code>webhook(&quot;https://custom-webhook.example.org/auth&quot;)
 webhook(&quot;https://custom-webhook.example.org/auth&quot;, &quot;X-Copy-Webhook-Header,X-Copy-Another-Header&quot;)
@@ -3653,7 +3657,7 @@ oauthGrant() -&gt; grantClaimsQuery(&quot;/path:scope.#[==\&quot;email\&quot;]&q
 <h2 id="oauthoidcuserinfo">oauthOidcUserInfo<a class="headerlink" href="#oauthoidcuserinfo" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>oauthOidcUserInfo(&quot;https://oidc-provider.example.com&quot;, &quot;client_id&quot;, &quot;client_secret&quot;,
     &quot;http://target.example.com/subpath/callback&quot;, &quot;email profile&quot;, &quot;name email picture&quot;,
-    &quot;parameter=value&quot;, &quot;X-Auth-Authorization:claims.email&quot;)
+    &quot;parameter=value&quot;, &quot;X-Auth-Authorization:claims.email&quot;, &quot;0&quot;)
 </code></pre></div>
 <p>The filter needs the following parameters:</p>
 <ul>
@@ -3666,6 +3670,7 @@ oauthGrant() -&gt; grantClaimsQuery(&quot;/path:scope.#[==\&quot;email\&quot;]&q
 <li><strong>Claims</strong> The claims which should be present in the token returned by the provider.</li>
 <li><strong>Auth Code Options</strong> (optional) Passes key/value parameters to a provider&rsquo;s authorization endpoint. The value can be dynamically set by a query parameter with the same key name if the placeholder <code>skipper-request-query</code> is used.</li>
 <li><strong>Upstream Headers</strong> (optional) The upstream endpoint will receive these headers which values are parsed from the OIDC information. The header definition can be one or more header-query pairs, space delimited. The query syntax is <a href="https://github.com/tidwall/gjson/blob/master/SYNTAX.md">GJSON</a>.</li>
+<li><strong>SubdomainsToRemove</strong> (optional, default &ldquo;1&rdquo;) Configures number of subdomains to remove from the request hostname to derive OIDC cookie domain. By default one subdomain is removed, e.g. for the <a href="http://www.example.com">www.example.com</a> request hostname the OIDC cookie domain will be example.com (to support SSO for all subdomains of the example.com). Configure &ldquo;0&rdquo; to use the same hostname. Note that value is a string.</li>
 </ul>
 <h2 id="oauthoidcanyclaims">oauthOidcAnyClaims<a class="headerlink" href="#oauthoidcanyclaims" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>oauthOidcAnyClaims(&quot;https://oidc-provider.example.com&quot;, &quot;client_id&quot;, &quot;client_secret&quot;,
