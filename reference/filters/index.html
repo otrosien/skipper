@@ -2867,13 +2867,18 @@ to be omitted:</p>
 <p>It is possible to control the compression level, by setting it as the first filter
 argument, in front of the MIME types. The default compression level is best-speed.
 The possible values are integers between 0 and 9 (inclusive), where 0 means
-no-compression, 1 means best-speed and 9 means best-compression. Example:</p>
-<div class="highlight"><pre><span></span><code>* -&gt; compress(9, &quot;image/tiff&quot;) -&gt; &quot;https://www.example.org&quot;
+no-compression, 1 means best-speed and 11 means best-compression. Example:</p>
+<div class="highlight"><pre><span></span><code>* -&gt; compress(11, &quot;image/tiff&quot;) -&gt; &quot;https://www.example.org&quot;
 </code></pre></div>
 <p>The filter also checks the incoming request, if it accepts the supported encodings,
-explicitly stated in the Accept-Encoding header. The filter currently supports <code>gzip</code>
-and <code>deflate</code>. It does not assume that the client accepts any encoding if the
+explicitly stated in the Accept-Encoding header. 
+The filter currently supports by default <code>gzip</code>, <code>deflate</code> and <code>br</code> (can be overridden with flag <code>compress-encodings</code>). 
+It does not assume that the client accepts any encoding if the
 Accept-Encoding header is not set. It ignores * in the Accept-Encoding header.</p>
+<p>Supported encodings are prioritized on:
+- quality value provided by client
+- compress-encodings flag following order as provided if quality value is equal
+- <code>gzip</code>, <code>deflate</code>, <code>br</code> in this order otherwise</p>
 <p>When compressing the response, it updates the response header. It deletes the
 <code>Content-Length</code> value triggering the proxy to always return the response with chunked
 transfer encoding, sets the Content-Encoding to the selected encoding and sets the
@@ -2881,7 +2886,7 @@ transfer encoding, sets the Content-Encoding to the selected encoding and sets t
 <p>The compression happens in a streaming way, using only a small internal buffer.</p>
 <h2 id="decompress">decompress<a class="headerlink" href="#decompress" title="Permanent link">&para;</a></h2>
 <p>The filter, when executed on the response path, checks if the response entity is
-compressed by a supported algorithm. To decide, it checks the Content-Encoding
+compressed by a supported algorithm (<code>gzip</code>, <code>deflate</code>, <code>br</code>). To decide, it checks the Content-Encoding
 header.</p>
 <p>When compressing the response, it updates the response header. It deletes the
 <code>Content-Length</code> value triggering the proxy to always return the response with chunked
@@ -4428,8 +4433,7 @@ codes in case of overrun. All scheduler filters return HTTP status code:</p>
 </code></pre></div>
 <p>The above configuration will set MaxConcurrency to 100, MaxQueueSize
 to 150 and Timeout to 10 seconds.</p>
-<p>When multiple lifo filters are set in a route, only one of them will be
-applied. It is undefined which one.</p>
+<p>When there are multiple lifo filters on the route, only the last one will be applied.</p>
 <h2 id="lifogroup">lifoGroup<a class="headerlink" href="#lifogroup" title="Permanent link">&para;</a></h2>
 <p>This filter is similar to the <a href="#lifo">lifo</a> filter.</p>
 <p>Parameters:</p>

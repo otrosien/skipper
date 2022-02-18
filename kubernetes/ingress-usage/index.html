@@ -710,8 +710,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#enable-gzip" class="md-nav__link">
-    Enable gzip
+  <a href="#enable-compression" class="md-nav__link">
+    Enable compression
   </a>
   
 </li>
@@ -1352,8 +1352,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#enable-gzip" class="md-nav__link">
-    Enable gzip
+  <a href="#enable-compression" class="md-nav__link">
+    Enable compression
   </a>
   
 </li>
@@ -2046,11 +2046,11 @@ annotation.</p>
 <div class="codehilite"><pre><span></span><code><span class="err">setResponseHeader(&quot;X-Foo&quot;, &quot;bar&quot;)</span>
 </code></pre></div>
 
-<h3 id="enable-gzip">Enable gzip<a class="headerlink" href="#enable-gzip" title="Permanent link">&para;</a></h3>
-<p>Compress responses with gzip.</p>
+<h3 id="enable-compression">Enable compression<a class="headerlink" href="#enable-compression" title="Permanent link">&para;</a></h3>
+<p>Compress responses with accepted encoding (more details <a href="../../reference/filters/#compress">here</a>).</p>
 <div class="codehilite"><pre><span></span><code><span class="err">compress() // compress all valid MIME types</span>
 <span class="err">compress(&quot;text/html&quot;) // only compress HTML files</span>
-<span class="err">compress(9, &quot;text/html&quot;) // control the level of compression, 1 = fastest, 9 = best compression, 0 = no compression</span>
+<span class="err">compress(11, &quot;text/html&quot;) // control the level of compression, 1 = fastest, 11 = best compression (fallback to 9 for gzip), 0 = no compression</span>
 </code></pre></div>
 
 <h3 id="set-the-path">Set the Path<a class="headerlink" href="#set-the-path" title="Permanent link">&para;</a></h3>
