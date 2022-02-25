@@ -1995,13 +1995,13 @@ runtime. Full logs of the Proxy span:</p>
 </ul>
 <p><img alt="Proxy span logs" src="../../img/skipper_opentracing_proxy_span_logs.png" /></p>
 <h3 id="request-filters-span">Request filters span<a class="headerlink" href="#request-filters-span" title="Permanent link">&para;</a></h3>
-<p>The request filters span logs shows <code>start</code> and <code>end</code> values for each
-filter applied.</p>
+<p>The request filters span logs show <code>start</code> and <code>end</code> events for each filter applied.</p>
 <p><img alt="request filter span with logs" src="../../img/skipper_opentracing_request_filters_span_with_logs.png" /></p>
 <h3 id="response-filters-span">Response filters span<a class="headerlink" href="#response-filters-span" title="Permanent link">&para;</a></h3>
-<p>The response filters span logs shows <code>start</code> and <code>end</code> values for each
-filter applied.</p>
+<p>The response filters span logs show <code>start</code> and <code>end</code> events for each filter applied.</p>
 <p><img alt="response filter span with logs" src="../../img/skipper_opentracing_response_filters_span_with_logs.png" /></p>
+<p>Request and response filters event logging can be disabled by setting the <code>-opentracing-log-filter-lifecycle-events=false</code> flag and
+span creation can be disabled altogether by the <code>-opentracing-disable-filter-spans</code> flag.</p>
 <h3 id="auth-filters-span">Auth filters span<a class="headerlink" href="#auth-filters-span" title="Permanent link">&para;</a></h3>
 <p>Auth filters are special, because they might call an authorization
 endpoint, which should be also visible in the trace. This span can

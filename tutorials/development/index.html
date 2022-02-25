@@ -757,6 +757,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#debugging-skipper" class="md-nav__link">
+    Debugging Skipper
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -875,6 +882,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#debugging-skipper" class="md-nav__link">
+    Debugging Skipper
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -984,6 +998,41 @@ curl -s http://localhost:9999/foo
 curl -s http://localhost:9999/foo
 2
 </code></pre></div></p>
+<h3 id="debugging-skipper">Debugging Skipper<a class="headerlink" href="#debugging-skipper" title="Permanent link">&para;</a></h3>
+<p>It can be helpful to run Skipper in a debug session locally that enables one to inspect variables and do other debugging activities in order to analyze filter and token states.</p>
+<p>For <em>Visual Studion Code</em> users, a simple setup could be to create following <em>launch configuration</em> that compiles Skipper, runs it in a <em>Delve</em> debug session, and then opens the default web browser creating the request. By setting a breakpoint, you can inspect the state of the filter or application. This setup is especially useful when inspecting <em>oauth</em> flows and tokens as it allows stepping through the states.</p>
+<details>
+<summary>Example `.vscode/launch.json` file</summary>
+
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.2.0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;configurations&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Launch Package&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;go&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;request&quot;</span><span class="p">:</span> <span class="s2">&quot;launch&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;debug&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;program&quot;</span><span class="p">:</span> <span class="s2">&quot;${workspaceFolder}/cmd/skipper/main.go&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;-application-log-level=debug&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-address=:9999&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-inline-routes=PathSubtree(\&quot;/\&quot;) -&gt; inlineContent(\&quot;Hello World\&quot;) -&gt; &lt;shunt&gt;&quot;</span><span class="p">,</span>
+               <span class="err">//</span> <span class="err">example</span> <span class="err">OIDC</span> <span class="err">se</span><span class="kc">tu</span><span class="err">p</span><span class="p">,</span> <span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="err">h</span><span class="kc">tt</span><span class="err">ps</span><span class="p">:</span><span class="err">//developer.microso</span><span class="kc">ft</span><span class="err">.com/e</span><span class="kc">n</span><span class="mi">-</span><span class="err">us/microso</span><span class="kc">ft</span><span class="mi">-365</span><span class="err">/dev</span><span class="mi">-</span><span class="err">program</span>
+               <span class="err">//</span>  <span class="s2">&quot;-oidc-secrets-file=${workspaceFolder}/.vscode/launch.json&quot;</span><span class="p">,</span>
+               <span class="err">//</span>  <span class="s2">&quot;-inline-routes=* -&gt; oauthOidcAnyClaims(\&quot;https://login.microsoftonline.com/&lt;tenant Id&gt;/v2.0\&quot;,\&quot;&lt;application id&gt;\&quot;,\&quot;&lt;client secret&gt;\&quot;,\&quot;http://localhost:9999/authcallback\&quot;, \&quot;profile\&quot;, \&quot;\&quot;, \&quot;\&quot;, \&quot;x-auth-email:claims.email x-groups:claims.groups\&quot;) -&gt; inlineContent(\&quot;restriced access\&quot;) -&gt; &lt;shunt&gt;&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;serverReadyAction&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;route settings applied&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;uriFormat&quot;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:9999&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;openExternally&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</details>
+
 <h2 id="docs">Docs<a class="headerlink" href="#docs" title="Permanent link">&para;</a></h2>
 <p>We have user documentation and developer documentation separated.
 In <code>docs/</code> you find the user documentation in <a href="https://www.mkdocs.org/">mkdocs</a> format and
