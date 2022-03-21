@@ -1050,9 +1050,7 @@ will instantiate a filter.</p>
 process. A spec has to satisfy the <code>Spec</code> interface <code>Name() string</code> and
 <code>CreateFilter([]interface{}) (filters.Filter, error)</code>.</p>
 <p>The actual filter implementation has to satisfy the <code>Filter</code>
-interface <code>Request(filters.FilterContext)</code> and <code>Response(filters.FilterContext)</code>.
-If you need to clean up for example a goroutine you can do it in
-<code>Close()</code>, which will be called on filter shutdown.</p>
+interface <code>Request(filters.FilterContext)</code> and <code>Response(filters.FilterContext)</code>.</p>
 <div class="highlight"><pre><span></span><code>diff --git a/filters/auth/webhook.go b/filters/auth/webhook.go
 new file mode 100644
 index 0000000..f0632a6
@@ -1133,16 +1131,6 @@ index 0000000..f0632a6
 +}
 +
 +func (*webhookFilter) Response(filters.FilterContext) {}
-+
-+// Close cleans-up the quit channel used for this filter
-+func (f *webhookFilter) Close() {
-+   f.authClient.mu.Lock()
-+   if f.authClient.quit != nil {
-+       close(f.authClient.quit)
-+       f.authClient.quit = nil
-+   }
-+   f.authClient.mu.Unlock()
-+}
 </code></pre></div>
 <h3 id="writing-tests">Writing tests<a class="headerlink" href="#writing-tests" title="Permanent link">&para;</a></h3>
 <p>Skipper uses normal table driven Go tests without frameworks.</p>

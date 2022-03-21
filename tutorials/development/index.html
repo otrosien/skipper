@@ -1052,9 +1052,7 @@ will instantiate a filter.</p>
 process. A spec has to satisfy the <code>filters.Spec</code> interface <code>Name() string</code> and
 <code>CreateFilter([]interface{}) (filters.Filter, error)</code>.</p>
 <p>The actual filter implementation has to satisfy the <code>filter.Filter</code>
-interface <code>Request(filters.FilterContext)</code> and <code>Response(filters.FilterContext)</code>.
-If you need to clean up for example a goroutine you can do it in
-<code>Close()</code>, which will be called on filter shutdown.</p>
+interface <code>Request(filters.FilterContext)</code> and <code>Response(filters.FilterContext)</code>.</p>
 <p>The simplest filter possible is, if <code>filters.Spec</code> and
 <code>filters.Filter</code> are the same type:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">type</span> <span class="nx">myFilter</span> <span class="kd">struct</span><span class="p">{}</span>
