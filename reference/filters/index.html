@@ -3008,10 +3008,11 @@ status and truncated response body.</p>
 <p>Enable adding artificial latency</p>
 <p>Parameters:</p>
 <ul>
-<li>latency in milliseconds (int)</li>
+<li>latency in milliseconds (int) or in <code>time</code> as a string in double quotes, parseable by <a href="https://godoc.org/time#ParseDuration">time.Duration</a>)</li>
 </ul>
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code>* -&gt; latency(120) -&gt; &quot;https://www.example.org&quot;;
+* -&gt; latency(&quot;120ms&quot;) -&gt; &quot;https://www.example.org&quot;;
 </code></pre></div>
 <h2 id="bandwidth">bandwidth<a class="headerlink" href="#bandwidth" title="Permanent link">&para;</a></h2>
 <p>Enable bandwidth throttling.</p>
